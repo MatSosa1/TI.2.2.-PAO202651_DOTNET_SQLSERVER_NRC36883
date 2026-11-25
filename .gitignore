@@ -1,0 +1,16 @@
+# Salidas de compilación (.NET, Visual Studio)
+bin/
+obj/
+.vs/
+*.user
+
+# Configuración local con secretos (API key de REST Countries)
+appsettings.Local.json
+
+# PowerDesigner: copias de respaldo automáticas
+*.oob
+
+# Claude Code: estado local y configuración personal
+.claude/settings.local.json
+.claude/worktrees/
+*.claude.local.md

@@ -1,0 +1,136 @@
+@*
+  ECUD4 Gestionar Países y ECUD6 Filtrar. La muestra PaisesController (GET/POST /paises).
+  ViewData:
+    paises, total, region (filtro activo, "" = todas), mensaje / error (flash)
+    confirmarEliminar -> nombre del país a eliminar: se muestra la confirmación
+  Razor escapa todo valor dinámico.
+*@
+@{
+    ViewData["titulo"] = "Países";
+    ViewData["activeNav"] = "paises";
+    string region = ViewData["region"] as string ?? "";
+    var paises = ViewData["paises"] as List<Pais> ?? [];
+    string urlVolver = "/paises" + (region.Length == 0 ? "" : "?region=" + Uri.EscapeDataString(region));
+}
+<div class="content__title">
+    <h1 class="text-heading-xl">Países</h1>
+    <p class="text-body">Países guardados en la base de datos local</p>
+</div>
+
+@if (ViewData["confirmarEliminar"] is string confirmarEliminar)
+{
+    @* ===== ECUD4 Eliminar pasos 2 y 3: confirmación (sin JavaScript) ===== *@
+    <section class="op-dialog" aria-labelledby="confirmar-title">
+        <h2 id="confirmar-title" class="op-dialog__title">Eliminar país</h2>
+        <p class="op-dialog__text">¿Eliminar el país <strong>@confirmarEliminar</strong>?</p>
+        <form class="op-form" method="post" action="/paises" data-procesando>
+            <partial name="_Csrf" />
+            <input type="hidden" name="accion" value="eliminar">
+            <input type="hidden" name="paso" value="confirmar">
+            <input type="hidden" name="nombre" value="@confirmarEliminar">
+            <input type="hidden" name="region" value="@region">
+            <div class="op-actions">
+                <span class="procesando" role="status">Procesando...</span>
+                <a class="btn btn--secondary" href="@urlVolver">Volver</a>
+                <button class="btn btn--danger" type="submit">Eliminar</button>
+            </div>
+        </form>
+    </section>
+}
+else
+{
+    @* ===== Tabla de países ===== *@
+    @if (ViewData["mensaje"] is string mensaje && mensaje.Length > 0)
+    {
+        <p class="alert alert--success" role="status">@mensaje</p>
+    }
+    @if (ViewData["error"] is string error && error.Length > 0)
+    {
+        <p class="alert alert--error" role="alert">@error</p>
+    }
+
+    <section class="op-card op-card--wide" aria-label="Países guardados">
+        <div class="toolbar">
+            <p class="total">
+                @if (paises.Count == 0 && region.Length == 0)
+                {
+                    @:No hay países registrados. Use «Consultar en la API» para guardarlos
+                }
+                else if (paises.Count == 0)
+                {
+                    @:No se encontraron países en esa región
+                }
+                else
+                {
+                    @ViewData["total"]
+                }
+            </p>
+            <div class="row-actions">
+                <span class="procesando" role="status">Procesando...</span>
+                <a class="btn btn--primary" href="/paises/nuevo">Nuevo</a>
+            </div>
+        </div>
+
+        @if (paises.Count > 0)
+        {
+            <div class="history__scroll">
+                <table class="history__table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Capital</th>
+                        <th scope="col">Región</th>
+                        <th scope="col" class="history__amount">Población</th>
+                        <th scope="col">Moneda</th>
+                        <th scope="col" class="history__amount">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (Pais p in paises)
+                    {
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td>@p.Capital</td>
+                            <td>@p.Region</td>
+                            <td class="history__amount">@p.PoblacionFormateada</td>
+                            <td>@p.Moneda</td>
+                            <td>
+                                <div class="row-actions">
+                                    @* ECUD4 Actualizar: el servidor vuelve a consultar la API *@
+                                    <form class="inline-form" method="post" action="/paises" data-procesando>
+                                        <partial name="_Csrf" />
+                                        <input type="hidden" name="accion" value="actualizar">
+                                        <input type="hidden" name="nombre" value="@p.Nombre">
+                                        <input type="hidden" name="region" value="@region">
+                                        <button class="btn btn--secondary btn--small" type="submit">Actualizar</button>
+                                    </form>
+                                    <form class="inline-form" method="post" action="/paises">
+                                        <partial name="_Csrf" />
+                                        <input type="hidden" name="accion" value="eliminar">
+                                        <input type="hidden" name="paso" value="revisar">
+                                        <input type="hidden" name="nombre" value="@p.Nombre">
+                                        <input type="hidden" name="region" value="@region">
+                                        <button class="btn btn--secondary btn--small" type="submit">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        @* ECUD6: lista de filtros en la parte inferior (ERS 9.1.1); filtra al elegir *@
+        <nav class="filtros" aria-label="Filtrar por región">
+            <span class="field__label">Filtrar por región</span>
+            <div class="filtros__lista">
+                <a class="chip@(region.Length == 0 ? " chip--active" : "")" href="/paises" aria-current="@(region.Length == 0 ? "true" : null)">Todas</a>
+                @foreach (string r in Formatos.Regiones)
+                {
+                    <a class="chip@(region == r ? " chip--active" : "")" href="/paises?region=@Uri.EscapeDataString(r)" aria-current="@(region == r ? "true" : null)">@r</a>
+                }
+            </div>
+        </nav>
+    </section>
+}

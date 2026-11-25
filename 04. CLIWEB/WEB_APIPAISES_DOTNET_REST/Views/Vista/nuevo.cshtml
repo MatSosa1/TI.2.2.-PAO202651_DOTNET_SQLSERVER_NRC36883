@@ -1,0 +1,84 @@
+@*
+  ECUD4 Registrar País. La muestra NuevoPaisController (GET/POST /paises/nuevo).
+  ViewData: consulta (texto consultado), resultados (países de la API), error.
+  El usuario consulta, elige un país de los resultados y presiona «Registrar»;
+  «Cancelar» vuelve a la tabla sin enviar nada (ECUD4 alterno 6).
+*@
+@{
+    ViewData["titulo"] = "Nuevo país";
+    ViewData["activeNav"] = "paises";
+    var resultados = ViewData["resultados"] as List<Pais> ?? [];
+    string consulta = ViewData["consulta"] as string ?? "";
+}
+<div class="content__title">
+    <h1 class="text-heading-xl">Nuevo país</h1>
+    <p class="text-body">Consulte el país en la API REST Countries y regístrelo</p>
+</div>
+
+@* Pasos 2 y 3: nombre a consultar *@
+<form class="op-card op-card--wide" method="get" action="/paises/nuevo" data-procesando>
+    <div class="search-row">
+        <div class="field">
+            <label class="field__label" for="consulta">Nombre del país</label>
+            <input class="field__input" type="text" id="consulta" name="consulta" maxlength="100"
+                   value="@consulta" placeholder="Ej.: ecuador" autocomplete="off" required autofocus>
+        </div>
+        <button class="btn btn--secondary" type="submit">Consultar</button>
+    </div>
+    <span class="procesando" role="status">Procesando...</span>
+</form>
+
+@if (ViewData["error"] is string error && error.Length > 0)
+{
+    <p class="alert alert--error" role="alert">@error</p>
+}
+
+@* Pasos 4 y 5: resultados y «Registrar» *@
+@if (resultados.Count > 0)
+{
+    <form class="op-card op-card--wide" method="post" action="/paises/nuevo" data-procesando>
+        <partial name="_Csrf" />
+        <input type="hidden" name="consulta" value="@consulta">
+        <div class="history__scroll">
+            <table class="history__table">
+                <thead>
+                <tr>
+                    <th scope="col"><span class="visually-hidden">Elegir</span></th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Capital</th>
+                    <th scope="col">Región</th>
+                    <th scope="col" class="history__amount">Población</th>
+                    <th scope="col">Moneda</th>
+                    <th scope="col">Guardado</th>
+                </tr>
+                </thead>
+                <tbody>
+                @for (int i = 0; i < resultados.Count; i++)
+                {
+                    Pais p = resultados[i];
+                    <tr>
+                        <td><input type="radio" name="nombre" id="pais-@i" value="@p.Nombre" checked="@(i == 0)"></td>
+                        <td><label for="pais-@i">@p.Nombre</label></td>
+                        <td>@p.Capital</td>
+                        <td>@p.Region</td>
+                        <td class="history__amount">@p.PoblacionFormateada</td>
+                        <td>@p.Moneda</td>
+                        <td><span class="tag @(p.Guardado ? "tag--si" : "tag--no")">@(p.Guardado ? "Sí" : "No")</span></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="op-actions">
+            <span class="procesando" role="status">Procesando...</span>
+            <a class="btn btn--secondary" href="/paises">Cancelar</a>
+            <button class="btn btn--primary" type="submit">Registrar</button>
+        </div>
+    </form>
+}
+else
+{
+    <div class="op-actions op-card--wide">
+        <a class="btn btn--secondary" href="/paises">Cancelar</a>
+    </div>
+}

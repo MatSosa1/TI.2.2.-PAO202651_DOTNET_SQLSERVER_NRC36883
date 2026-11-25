@@ -1,0 +1,45 @@
+<UserControl x:Class="ec.edu.monster.vista.BusquedaPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource Fondo}">
+    <!-- ECUD5 Buscar Países: Nombre, Capital y la lista de regiones (ECUD6 al cambiarla) -->
+    <DockPanel Margin="28,24,28,20">
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <TextBlock Text="Buscar países" Style="{StaticResource Titulo}" Margin="0,0,0,6" />
+            <TextBlock Text="Busque por nombre, capital o región" Style="{StaticResource TextoNormal}" Margin="0,0,0,14" />
+            <Border Style="{StaticResource Tarjeta}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="0.6*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Nombre" Style="{StaticResource Etiqueta}" Margin="0,0,12,4" />
+                    <TextBlock Text="Capital" Style="{StaticResource Etiqueta}" Grid.Column="1" Margin="0,0,12,4" />
+                    <TextBlock Text="Región" Style="{StaticResource Etiqueta}" Grid.Column="2" Margin="0,0,12,4" />
+                    <TextBox x:Name="CampoNombre" Grid.Row="1" Margin="0,0,12,0" KeyDown="Campo_KeyDown" />
+                    <TextBox x:Name="CampoCapital" Grid.Row="1" Grid.Column="1" Margin="0,0,12,0" KeyDown="Campo_KeyDown" />
+                    <ComboBox x:Name="ComboRegion" Grid.Row="1" Grid.Column="2" Margin="0,0,12,0" SelectionChanged="Region_Changed" />
+                    <Button x:Name="BotonBuscar" Content="Buscar" Grid.Row="1" Grid.Column="3" Style="{StaticResource BotonPrimario}"
+                            Click="Buscar_Click" />
+                </Grid>
+            </Border>
+        </StackPanel>
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                <TextBlock x:Name="Total" Style="{StaticResource TextoNormal}" DockPanel.Dock="Left" TextWrapping="NoWrap" />
+                <TextBlock x:Name="Mensaje" Style="{StaticResource LineaMensaje}" Margin="24,0,0,0" />
+            </DockPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ProgressBar x:Name="Progreso" Style="{StaticResource Progreso}" />
+                <Button x:Name="BotonLimpiar" Content="Limpiar" Style="{StaticResource BotonSecundario}" Click="Limpiar_Click" />
+            </StackPanel>
+        </DockPanel>
+        <DataGrid x:Name="Tabla" />
+    </DockPanel>
+</UserControl>

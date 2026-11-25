@@ -1,0 +1,87 @@
+@*
+  ECUD7 Generar Informes Estadísticos. La muestra InformesController (GET /informes).
+  ViewData: informe (tablas, país más poblado y barras del gráfico), mensaje, error, sinPaises.
+  El gráfico es un SVG generado en el servidor: no usa librerías de JavaScript ni CDN.
+*@
+@{
+    ViewData["titulo"] = "Informes";
+    ViewData["activeNav"] = "informes";
+    ViewData["sinScript"] = true;
+    var informe = ViewData["informe"] as Informe;
+}
+<div class="content__title">
+    <h1 class="text-heading-xl">Informes</h1>
+    <p class="text-body">Estadísticas de los países guardados en la base local</p>
+</div>
+
+@if (ViewData["error"] is string error && error.Length > 0)
+{
+    <p class="alert alert--error" role="alert">@error</p>
+    @if (ViewData["sinPaises"] is true)
+    {
+        @* ECUD7 alterno 2: se sugiere guardar países *@
+        <p class="alert alert--info">Use <a href="/consulta">«Consultar en la API»</a> para guardar países.</p>
+    }
+}
+
+@if (informe != null)
+{
+    <p class="alert alert--success" role="status">@ViewData["mensaje"]</p>
+
+    <div class="reports">
+        <section class="op-card" aria-labelledby="conteo-title">
+            <h2 id="conteo-title" class="receipt__title">Países por región</h2>
+            <table class="history__table">
+                <thead>
+                <tr><th scope="col">Región</th><th scope="col" class="history__amount">Países</th></tr>
+                </thead>
+                <tbody>
+                @foreach (ConteoRegion conteo in informe.PaisesPorRegion ?? [])
+                {
+                    <tr><td>@conteo.Region</td><td class="history__amount">@conteo.Cantidad</td></tr>
+                }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="op-card" aria-labelledby="promedio-title">
+            <h2 id="promedio-title" class="receipt__title">Promedio poblacional por región</h2>
+            <table class="history__table">
+                <thead>
+                <tr><th scope="col">Región</th><th scope="col" class="history__amount">Promedio de población</th></tr>
+                </thead>
+                <tbody>
+                @foreach (PromedioRegion p in informe.PromedioPorRegion ?? [])
+                {
+                    <tr><td>@p.Region</td><td class="history__amount">@p.PromedioFormateado</td></tr>
+                }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="op-card stat" aria-labelledby="mayor-title">
+            <h2 id="mayor-title" class="receipt__title">País más poblado</h2>
+            @{ Pais? mayor = informe.PaisMasPoblado; }
+            <p class="stat__name">@mayor?.Nombre</p>
+            <p class="stat__detail">@mayor?.PoblacionFormateada habitantes · @mayor?.Region</p>
+            <p class="stat__detail">Capital: @mayor?.Capital</p>
+        </section>
+
+        <section class="op-card" aria-labelledby="grafico-title">
+            <h2 id="grafico-title" class="receipt__title">Cantidad de países por región</h2>
+            <svg class="chart" viewBox="0 0 @Informe.AnchoGrafico @Informe.AltoGrafico" role="img"
+                 aria-label="Gráfico de barras: cantidad de países por región">
+                <line class="chart__axis" x1="0" y1="@Informe.BaseGrafico" x2="@Informe.AnchoGrafico" y2="@Informe.BaseGrafico"/>
+                @foreach (Barra b in informe.Barras)
+                {
+                    <rect class="chart__bar" x="@b.X" y="@b.Y" width="@b.Ancho" height="@b.Alto" rx="4">
+                        <title>@b.Region: @b.Cantidad</title>
+                    </rect>
+                    @* «text» es una etiqueta reservada de Razor dentro de un bloque: se emite con @: *@
+                    @:<text class="chart__value" x="@b.Centro" y="@(b.Y - 8)">@b.Cantidad</text>
+                    @:<text class="chart__label" x="@b.Centro" y="@(Informe.BaseGrafico + 24)">@b.Region</text>
+                }
+            </svg>
+        </section>
+    </div>
+}

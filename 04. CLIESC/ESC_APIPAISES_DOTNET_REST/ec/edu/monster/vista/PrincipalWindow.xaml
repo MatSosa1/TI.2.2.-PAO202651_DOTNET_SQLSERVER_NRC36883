@@ -1,0 +1,54 @@
+<Window x:Class="ec.edu.monster.vista.PrincipalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="clr-namespace:ec.edu.monster.vista"
+        Title="APIPaises" Width="1100" Height="760" MinWidth="980" MinHeight="700"
+        WindowStartupLocation="CenterScreen" Style="{StaticResource Ventana}">
+    <DockPanel>
+        <Menu x:Name="BarraMenu" DockPanel.Dock="Top">
+            <MenuItem x:Name="MenuArchivo" Header="Archivo" />
+        </Menu>
+
+        <!-- Encabezado: marca «AP», nombre, sello del servicio, usuario y «Cerrar sesión» -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource Blanco}" BorderBrush="{StaticResource Borde}"
+                BorderThickness="0,0,0,1" Padding="24,12">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                    <TextBlock x:Name="NombreUsuario" FontWeight="Bold" Foreground="{StaticResource Texto}"
+                               VerticalAlignment="Center" Margin="0,0,12,0" />
+                    <TextBlock Text="Usuario" Style="{StaticResource Pequena}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                    <Button Content="Cerrar sesión" Style="{StaticResource BotonSecundario}" Click="CerrarSesion_Click" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="{StaticResource Primario}" Padding="8,4" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <TextBlock Text="AP" Foreground="{StaticResource Blanco}" FontWeight="Bold" />
+                    </Border>
+                    <TextBlock Text="APIPaises" Style="{StaticResource Subtitulo}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <Border BorderBrush="{StaticResource Primario}" BorderThickness="1" Padding="8,2" VerticalAlignment="Center">
+                        <TextBlock Text="REST / .NET" FontSize="13" FontWeight="Bold" Foreground="{StaticResource Primario}" />
+                    </Border>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Línea de estado del servidor -->
+        <ContentControl x:Name="ContenedorEstado" DockPanel.Dock="Bottom" Margin="30,8,30,14" />
+
+        <!-- Menú lateral -->
+        <Border DockPanel.Dock="Left" Width="210" Background="{StaticResource Blanco}" BorderBrush="{StaticResource Borde}"
+                BorderThickness="0,0,1,0" Padding="10,14">
+            <StackPanel x:Name="Navegacion">
+                <TextBlock Text="MENÚ" Style="{StaticResource Pequena}" Margin="14,0,0,8" />
+            </StackPanel>
+        </Border>
+
+        <!-- Pantallas (equivale al CardLayout): solo una visible a la vez -->
+        <Grid x:Name="Contenido">
+            <v:InicioPanel x:Name="Inicio" />
+            <v:PaisesPanel x:Name="Paises" Visibility="Collapsed" />
+            <v:ConsultaApiPanel x:Name="Consulta" Visibility="Collapsed" />
+            <v:BusquedaPanel x:Name="Busqueda" Visibility="Collapsed" />
+            <v:InformesPanel x:Name="Informes" Visibility="Collapsed" />
+        </Grid>
+    </DockPanel>
+</Window>

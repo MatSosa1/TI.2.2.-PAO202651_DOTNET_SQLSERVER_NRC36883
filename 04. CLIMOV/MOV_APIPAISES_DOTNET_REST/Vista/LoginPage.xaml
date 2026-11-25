@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- ECUD1: mismo diseño que el inicio de sesión del cliente Android de TI.2.1 (encabezado con degradado
+     y tarjeta superpuesta), sin selector de perfil porque hay un solo tipo de usuario. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:comp="clr-namespace:MOV_APIPAISES_DOTNET_REST.Vista.Componentes"
+             x:Class="MOV_APIPAISES_DOTNET_REST.Vista.LoginPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource FondoApp}">
+    <ScrollView>
+        <VerticalStackLayout>
+            <!-- Encabezado con el globo terráqueo -->
+            <VerticalStackLayout Background="{StaticResource GradientePrimario}" Padding="24,56,24,96" Spacing="4">
+                <Border WidthRequest="72" HeightRequest="72"
+                        BackgroundColor="{StaticResource BlancoTranslucido}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 18"
+                        HorizontalOptions="Center">
+                    <comp:Icono Datos="{x:Static comp:Iconos.Globo}" Color="White" Tamano="40" />
+                </Border>
+                <Label Text="APIPaises" TextColor="White" FontSize="30" FontFamily="OpenSansSemibold"
+                       HorizontalOptions="Center" Margin="0,12,0,0" />
+                <Label Text="Países del mundo · Servicio REST / .NET" TextColor="{StaticResource TextoSobrePrimario}"
+                       FontSize="14" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <!-- Tarjeta del formulario, superpuesta al encabezado -->
+            <Border Style="{StaticResource Tarjeta}" StrokeShape="RoundRectangle 20"
+                    Margin="20,-56,20,0" Padding="24">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.12" Radius="8" Offset="0,2" />
+                </Border.Shadow>
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="Iniciar sesión" TextColor="{StaticResource ApPrimario}" FontSize="24"
+                           FontFamily="OpenSansSemibold" SemanticProperties.HeadingLevel="Level1" />
+                    <Label Style="{StaticResource Secundario}" Margin="0,4,0,0"
+                           Text="Ingrese sus credenciales para continuar" />
+                    <comp:CampoTexto x:Name="CampoUsuario" Titulo="Usuario" Margin="0,20,0,0" TipoRetorno="Next"
+                                     IconoDatos="{x:Static comp:Iconos.Persona}" />
+                    <comp:CampoTexto x:Name="CampoClave" Titulo="Clave" Margin="0,12,0,0" TipoRetorno="Go" EsClave="True"
+                                     IconoDatos="{x:Static comp:Iconos.Candado}" />
+                    <comp:AvisoError x:Name="LblError" Margin="0,16,0,0" />
+                    <comp:BotonCarga x:Name="BtnIngresar" Texto="Ingresar" Margin="0,24,0,0" />
+                </VerticalStackLayout>
+            </Border>
+            <Label x:Name="LblServidor" Style="{StaticResource Secundario}" FontSize="12"
+                   HorizontalOptions="Center" Margin="0,20,0,24" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

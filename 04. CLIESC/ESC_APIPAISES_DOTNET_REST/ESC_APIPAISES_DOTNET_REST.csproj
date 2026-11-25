@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Cliente de escritorio WPF de APIPaises (TI.2.2). -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ec.edu.monster</RootNamespace>
+    <AssemblyName>ESC_APIPAISES_DOTNET_REST</AssemblyName>
+  </PropertyGroup>
+
+  <!-- El proyecto de pruebas vive en pruebas/ (convención del curso): fuera de la aplicación. -->
+  <ItemGroup>
+    <Compile Remove="pruebas\**" />
+    <Page Remove="pruebas\**" />
+    <None Remove="pruebas\**" />
+    <Resource Remove="pruebas\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ESC_APIPAISES_DOTNET_REST.Pruebas" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Único archivo que se edita para apuntar el cliente a otro servidor (sin recompilar). -->
+    <None Update="cliente.properties">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

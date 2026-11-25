@@ -1,0 +1,28 @@
+<Window x:Class="ec.edu.monster.vista.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="APIPaises" Width="640" Height="480" WindowStartupLocation="CenterScreen"
+        Style="{StaticResource Ventana}">
+    <!-- Ventana de inicio de sesión (ECUD1), con el mismo diseño que TI.2.1 -->
+    <DockPanel>
+        <Menu x:Name="BarraMenu" DockPanel.Dock="Top">
+            <MenuItem Header="Archivo">
+                <MenuItem Header="Salir" Click="Salir_Click" />
+            </MenuItem>
+        </Menu>
+        <ContentControl x:Name="ContenedorEstado" DockPanel.Dock="Bottom" Margin="50,0,50,18" />
+        <StackPanel Margin="50,36,50,0">
+            <TextBlock Text="APIPaises" Style="{StaticResource Titulo}" Margin="0,0,0,6" />
+            <TextBlock Text="Países del mundo · Servicio REST / .NET" Style="{StaticResource TextoNormal}" Margin="0,0,0,26" />
+            <TextBlock Text="Usuario" Style="{StaticResource Etiqueta}" Margin="0,0,0,8" />
+            <TextBox x:Name="CampoUsuario" Margin="0,0,0,22" />
+            <TextBlock Text="Contraseña" Style="{StaticResource Etiqueta}" Margin="0,0,0,8" />
+            <PasswordBox x:Name="CampoClave" Margin="0,0,0,22" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ProgressBar x:Name="Progreso" Style="{StaticResource Progreso}" Margin="0,0,12,0" />
+                <Button x:Name="BotonIngresar" Content="Ingresar" Width="126" Height="40" IsDefault="True"
+                        Style="{StaticResource BotonPrimario}" Click="Ingresar_Click" />
+            </StackPanel>
+        </StackPanel>
+    </DockPanel>
+</Window>

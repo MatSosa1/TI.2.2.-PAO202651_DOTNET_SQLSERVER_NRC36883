@@ -1,0 +1,72 @@
+<UserControl x:Class="ec.edu.monster.vista.InformesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:v="clr-namespace:ec.edu.monster.vista"
+             Background="{StaticResource Fondo}">
+    <!-- ECUD7 Generar Informes: dos tablas, país más poblado y gráfico de barras -->
+    <DockPanel Margin="28,24,28,20">
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                <ProgressBar x:Name="Progreso" Style="{StaticResource Progreso}" />
+                <Button x:Name="BotonGenerar" Content="Generar informes" Style="{StaticResource BotonPrimario}" Click="Generar_Click" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Informes" Style="{StaticResource Titulo}" Margin="0,0,0,6" />
+                <TextBlock Text="Estadísticas de los países guardados en la base local" Style="{StaticResource TextoNormal}" />
+            </StackPanel>
+        </DockPanel>
+        <TextBlock x:Name="Mensaje" DockPanel.Dock="Bottom" Style="{StaticResource LineaMensaje}" Margin="0,16,0,0" />
+
+        <Grid x:Name="Contenido" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="16" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Arriba: las dos tablas con las seis regiones (alto completo) -->
+            <Border Style="{StaticResource Tarjeta}">
+                <DockPanel>
+                    <TextBlock Text="Países por región" Style="{StaticResource Etiqueta}" DockPanel.Dock="Top" Margin="0,0,0,10" />
+                    <DataGrid x:Name="TablaConteo" Style="{StaticResource Tabla}" RowHeight="24" VerticalScrollBarVisibility="Disabled">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Región" Binding="{Binding Region}" Width="*" ElementStyle="{StaticResource CeldaIzquierda}" />
+                            <DataGridTextColumn Header="Países" Binding="{Binding Cantidad}" Width="*" ElementStyle="{StaticResource CeldaDerecha}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+            <Border Style="{StaticResource Tarjeta}" Grid.Column="2">
+                <DockPanel>
+                    <TextBlock Text="Promedio poblacional por región" Style="{StaticResource Etiqueta}" DockPanel.Dock="Top" Margin="0,0,0,10" />
+                    <DataGrid x:Name="TablaPromedio" Style="{StaticResource Tabla}" RowHeight="24" VerticalScrollBarVisibility="Disabled">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Región" Binding="{Binding Region}" Width="*" ElementStyle="{StaticResource CeldaIzquierda}" />
+                            <DataGridTextColumn Header="Promedio de población" Binding="{Binding Promedio}" Width="*" ElementStyle="{StaticResource CeldaDerecha}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Abajo: país más poblado y gráfico -->
+            <Border Style="{StaticResource Tarjeta}" Grid.Row="2" Background="{StaticResource FondoResultado}">
+                <StackPanel>
+                    <TextBlock Text="País más poblado" Style="{StaticResource Etiqueta}" Margin="0,0,0,10" />
+                    <TextBlock x:Name="MasPobladoNombre" Style="{StaticResource Subtitulo}" Margin="0,0,0,4" />
+                    <TextBlock x:Name="MasPobladoDetalle" Style="{StaticResource TextoNormal}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Tarjeta}" Grid.Row="2" Grid.Column="2">
+                <DockPanel>
+                    <TextBlock Text="Cantidad de países por región" Style="{StaticResource Etiqueta}" DockPanel.Dock="Top" Margin="0,0,0,10" />
+                    <v:GraficoBarras x:Name="Grafico" />
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,13 @@
+<UserControl x:Class="ec.edu.monster.vista.InicioPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource Fondo}">
+    <!-- Pantalla de inicio: saludo y una tarjeta por opción del menú, como el menú de EurekaBank -->
+    <DockPanel Margin="30,28,30,24">
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,22">
+            <TextBlock x:Name="Saludo" Style="{StaticResource Titulo}" Margin="0,0,0,6" />
+            <TextBlock Text="Seleccione una opción para continuar." Style="{StaticResource TextoNormal}" />
+        </StackPanel>
+        <UniformGrid x:Name="Tarjetas" Rows="2" Columns="2" />
+    </DockPanel>
+</UserControl>

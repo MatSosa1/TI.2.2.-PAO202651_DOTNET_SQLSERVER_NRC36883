@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- Cliente web ASP.NET Core MVC de APIPaises (TI.2.2): http://localhost:5091/ -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>WEB_APIPAISES_DOTNET_REST</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Las pruebas van en pruebas/ (convención del curso) y se compilan en su propio proyecto. -->
+  <ItemGroup>
+    <Compile Remove="pruebas\**" />
+    <Content Remove="pruebas\**" />
+    <EmbeddedResource Remove="pruebas\**" />
+    <None Remove="pruebas\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="WEB_APIPAISES_DOTNET_REST.Pruebas" />
+  </ItemGroup>
+
+</Project>

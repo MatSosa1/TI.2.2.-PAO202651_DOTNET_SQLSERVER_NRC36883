@@ -1,0 +1,95 @@
+@*
+  ECUD5 Buscar Países. La muestra BusquedaController (GET /busqueda).
+  ViewData: nombre, capital, region, resultados, total, mensaje, error.
+  Al cambiar la región el formulario se envía solo (ECUD6); sin JavaScript se usa «Buscar».
+*@
+@{
+    ViewData["titulo"] = "Buscar países";
+    ViewData["activeNav"] = "busqueda";
+    string region = ViewData["region"] as string ?? "";
+    var resultados = ViewData["resultados"] as List<Pais>;
+}
+<div class="content__title">
+    <h1 class="text-heading-xl">Buscar países</h1>
+    <p class="text-body">Busque por nombre, capital o región</p>
+</div>
+
+<form class="op-card op-card--wide" method="get" action="/busqueda" data-procesando>
+    <input type="hidden" name="buscar" value="1">
+    <div class="search-grid">
+        <div class="field">
+            <label class="field__label" for="nombre">Nombre</label>
+            <input class="field__input" type="text" id="nombre" name="nombre" maxlength="100"
+                   value="@ViewData["nombre"]" placeholder="Ej.: ecua" autocomplete="off">
+        </div>
+        <div class="field">
+            <label class="field__label" for="capital">Capital</label>
+            <input class="field__input" type="text" id="capital" name="capital" maxlength="100"
+                   value="@ViewData["capital"]" placeholder="Ej.: quito" autocomplete="off">
+        </div>
+        <div class="field">
+            <label class="field__label" for="region">Región</label>
+            <select class="field__input field__select" id="region" name="region" data-autoenviar>
+                <option value="" selected="@(region.Length == 0)">Todas</option>
+                @foreach (string r in Formatos.Regiones)
+                {
+                    <option value="@r" selected="@(region == r)">@r</option>
+                }
+            </select>
+        </div>
+        <button class="btn btn--primary" type="submit">Buscar</button>
+    </div>
+    <span class="procesando" role="status">Procesando...</span>
+</form>
+
+@if (ViewData["error"] is string error && error.Length > 0)
+{
+    <p class="alert alert--error" role="alert">@error</p>
+}
+
+@if (ViewData["total"] is string total)
+{
+    <section class="op-card op-card--wide" aria-label="Resultados de la búsqueda">
+        <div class="toolbar">
+            <p class="total">
+                @if (resultados == null || resultados.Count == 0)
+                {
+                    @:No se encontraron países con esos criterios
+                }
+                else
+                {
+                    @total
+                }
+            </p>
+            <span class="tag tag--si">@ViewData["mensaje"]</span>
+        </div>
+        @if (resultados != null && resultados.Count > 0)
+        {
+            <div class="history__scroll">
+                <table class="history__table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Capital</th>
+                        <th scope="col">Región</th>
+                        <th scope="col" class="history__amount">Población</th>
+                        <th scope="col">Moneda</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (Pais p in resultados)
+                    {
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td>@p.Capital</td>
+                            <td>@p.Region</td>
+                            <td class="history__amount">@p.PoblacionFormateada</td>
+                            <td>@p.Moneda</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+}

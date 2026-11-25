@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CONSOLE_APIPAISES_DOTNET_REST.csproj" />
+  <Project Path="pruebas/CONSOLE_APIPAISES_DOTNET_REST.Pruebas.csproj" />
+</Solution>

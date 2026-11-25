@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MOV_APIPAISES_DOTNET_REST.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vista="clr-namespace:MOV_APIPAISES_DOTNET_REST.Vista"
+    Title="APIPaises"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.BackgroundColor="{StaticResource ApPrimario}"
+    Shell.TitleColor="White"
+    Shell.ForegroundColor="White"
+    Shell.TabBarBackgroundColor="White"
+    Shell.TabBarForegroundColor="{StaticResource ApPrimario}"
+    Shell.TabBarTitleColor="{StaticResource ApPrimario}"
+    Shell.TabBarUnselectedColor="{StaticResource TextoSecundario}">
+
+    <ShellContent Route="login" ContentTemplate="{DataTemplate vista:LoginPage}" />
+
+    <!-- Menú principal (ECUD1 paso 7): Inicio, Países (con Buscar y Filtrar), API e Informes;
+         Cerrar sesión va en la barra superior -->
+    <TabBar Route="principal">
+        <ShellContent Title="Inicio" Icon="tab_inicio.png" Route="inicio"
+                      ContentTemplate="{DataTemplate vista:InicioPage}" />
+        <ShellContent Title="Países" Icon="tab_paises.png" Route="paises"
+                      ContentTemplate="{DataTemplate vista:PaisesPage}" />
+        <ShellContent Title="API" Icon="tab_api.png" Route="api"
+                      ContentTemplate="{DataTemplate vista:ApiPage}" />
+        <ShellContent Title="Informes" Icon="tab_informes.png" Route="informes"
+                      ContentTemplate="{DataTemplate vista:InformesPage}" />
+    </TabBar>
+</Shell>

@@ -1,0 +1,237 @@
+/*
+ * Pantallas de países (tabla, filtros, consulta en la API, búsqueda e informes).
+ * Completa los componentes de EurekaBank (apipaises.css, menu.css, operacion.css) con lo que
+ * este sistema necesita y aquel no tenía; usa solo sus tokens.
+ */
+
+/* Tarjeta a todo el ancho del contenido (tablas de cinco o seis columnas) */
+.op-card--wide {
+  width: 100%;
+  max-width: 1080px;
+}
+
+/* Texto solo para lectores de pantalla */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Fila con el total a la izquierda y las acciones a la derecha */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.total {
+  margin: 0;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+/* ---------- Filtros por región (ERS 9.1.1: lista de filtros en la parte inferior) ---------- */
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtros__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 6px 14px;
+  border: 1px solid var(--gray-300);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--gray-900);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.chip:hover {
+  border-color: var(--brand-500);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--brand-700);
+  outline-offset: 2px;
+}
+
+.chip--active {
+  background: var(--brand-500);
+  border-color: var(--brand-500);
+  color: var(--white);
+}
+
+/* ---------- Acciones por fila ---------- */
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.inline-form {
+  display: inline;
+  margin: 0;
+}
+
+.btn--small {
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+/* Columna «Guardado»: Sí / No con los colores de éxito y neutro */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tag--si {
+  background: var(--success-50);
+  color: var(--success-600);
+}
+
+.tag--no {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+/* ---------- Formularios en línea (consulta y búsqueda) ---------- */
+
+.search-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.search-row .field {
+  flex: 1 1 auto;
+}
+
+.search-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 220px auto;
+  align-items: end;
+  gap: 16px;
+}
+
+.field__select {
+  appearance: auto;
+}
+
+/* Indicador mientras el servidor procesa (ECUD: indicador de progreso) */
+.procesando {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+.procesando--activo {
+  display: inline-flex;
+}
+
+.procesando::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--gray-300);
+  border-top-color: var(--brand-500);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Informes (ECUD7) ---------- */
+
+.reports {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 1080px;
+}
+
+.reports .op-card {
+  width: auto;
+}
+
+.stat {
+  background: var(--brand-100);
+  border-color: var(--brand-100);
+}
+
+.stat__name {
+  margin: 0;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  color: var(--brand-900);
+}
+
+.stat__detail {
+  margin: 0;
+  color: var(--gray-900);
+}
+
+.chart {
+  width: 100%;
+  height: auto;
+}
+
+.chart__bar {
+  fill: var(--brand-500);
+}
+
+.chart__axis {
+  stroke: var(--gray-300);
+}
+
+/* Tamaños en unidades del viewBox (600 de ancho): el SVG se reduce al ancho de la tarjeta */
+.chart__value,
+.chart__label {
+  font-family: var(--font);
+  font-size: 18px;
+  fill: var(--gray-900);
+  text-anchor: middle;
+}
+
+.chart__value {
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+  .search-grid,
+  .reports {
+    grid-template-columns: 1fr;
+  }
+
+  .search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -1,0 +1,39 @@
+@*
+  Menú principal (inicio después del login). Lo muestra MenuController (GET /menu).
+  Una tarjeta por opción del ECUD1 paso 7, con el mismo diseño que el menú de TI.2.1.
+*@
+@{
+    ViewData["titulo"] = "Menú";
+    ViewData["activeNav"] = "inicio";
+    ViewData["estilos"] = new[] { "apipaises", "menu" };
+    ViewData["sinScript"] = true;
+}
+<div class="content__title">
+    <h1 class="text-heading-xl">Bienvenido, @Context.Session.GetString(SesionWeb.Nombre)</h1>
+    <p class="text-body">Seleccione una opción</p>
+</div>
+
+<div class="cards">
+    <a class="card" href="/paises">
+        <span class="card__icon" aria-hidden="true">P</span>
+        <span class="card__title">Países</span>
+        <span class="card__text">Liste, registre, actualice y elimine los países guardados</span>
+    </a>
+    <a class="card" href="/consulta">
+        <span class="card__icon" aria-hidden="true">C</span>
+        <span class="card__title">Consultar en la API</span>
+        <span class="card__text">Consulte un país en REST Countries y guárdelo en la base local</span>
+    </a>
+    <a class="card" href="/busqueda">
+        <span class="card__icon" aria-hidden="true">B</span>
+        <span class="card__title">Buscar países</span>
+        <span class="card__text">Busque por nombre, capital o región</span>
+    </a>
+    <a class="card" href="/informes">
+        <span class="card__icon" aria-hidden="true">I</span>
+        <span class="card__title">Informes</span>
+        <span class="card__text">Países por región, país más poblado y promedio poblacional</span>
+    </a>
+</div>
+
+<p class="alert alert--info">Este cliente consume el servicio REST desarrollado en .NET.</p>

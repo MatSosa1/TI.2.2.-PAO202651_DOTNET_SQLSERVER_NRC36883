@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MOV_APIPAISES_DOTNET_REST.csproj" />
+  <Project Path="pruebas/MOV_APIPAISES_DOTNET_REST.Pruebas.csproj" />
+</Solution>

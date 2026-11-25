@@ -1,0 +1,32 @@
+<UserControl x:Class="ec.edu.monster.vista.ConsultaApiPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource Fondo}">
+    <!-- ECUD3 Consultar País en la API y ECUD2 Importar -->
+    <DockPanel Margin="28,24,28,20">
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <TextBlock Text="Consultar en la API" Style="{StaticResource Titulo}" Margin="0,0,0,6" />
+            <TextBlock Text="Consulte un país en REST Countries y guárdelo en la base de datos local"
+                       Style="{StaticResource TextoNormal}" Margin="0,0,0,14" />
+            <Border Style="{StaticResource Tarjeta}">
+                <DockPanel>
+                    <TextBlock Text="Nombre del país" Style="{StaticResource Etiqueta}" DockPanel.Dock="Top" Margin="0,0,0,6" />
+                    <Button x:Name="BotonConsultar" Content="Consultar" Width="120" Height="36" DockPanel.Dock="Right"
+                            Margin="10,0,0,0" Style="{StaticResource BotonPrimario}" Click="Consultar_Click" />
+                    <TextBox x:Name="CampoNombre" KeyDown="CampoNombre_KeyDown" />
+                </DockPanel>
+            </Border>
+        </StackPanel>
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+            <TextBlock x:Name="Mensaje" DockPanel.Dock="Top" Style="{StaticResource LineaMensaje}" Margin="0,0,0,10" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ProgressBar x:Name="Progreso" Style="{StaticResource Progreso}" />
+                <Button x:Name="BotonImportarTodos" Content="Importar todos" Style="{StaticResource BotonSecundario}"
+                        Margin="0,0,8,0" Click="ImportarTodos_Click" />
+                <Button x:Name="BotonGuardar" Content="Guardar" Style="{StaticResource BotonPrimario}" IsEnabled="False"
+                        Click="Guardar_Click" />
+            </StackPanel>
+        </DockPanel>
+        <DataGrid x:Name="Tabla" />
+    </DockPanel>
+</UserControl>

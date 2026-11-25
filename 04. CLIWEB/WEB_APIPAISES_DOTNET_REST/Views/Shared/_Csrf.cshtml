@@ -1,0 +1,2 @@
+@* Token CSRF (synchronizer token, lo revisa CsrfFilter). Se incluye en todo formulario POST. *@
+<input type="hidden" name="_csrf" value="@Context.Session.GetString(CsrfFilter.SessionAttribute)">

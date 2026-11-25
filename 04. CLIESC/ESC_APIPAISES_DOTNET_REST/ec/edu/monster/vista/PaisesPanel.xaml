@@ -1,0 +1,35 @@
+<UserControl x:Class="ec.edu.monster.vista.PaisesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource Fondo}">
+    <!-- ECUD4 Gestionar Países con la lista de filtros por región en la parte inferior (ECUD6) -->
+    <DockPanel Margin="28,24,28,20">
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <TextBlock Text="Países" Style="{StaticResource Titulo}" Margin="0,0,0,6" />
+            <TextBlock Text="Países guardados en la base de datos local" Style="{StaticResource TextoNormal}" />
+        </StackPanel>
+
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                <TextBlock x:Name="Total" Style="{StaticResource TextoNormal}" DockPanel.Dock="Left" TextWrapping="NoWrap" />
+                <TextBlock x:Name="Mensaje" Style="{StaticResource LineaMensaje}" Margin="24,0,0,0" />
+            </DockPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ProgressBar x:Name="Progreso" Style="{StaticResource Progreso}" />
+                <Button x:Name="BotonEliminar" Content="Eliminar" Style="{StaticResource BotonSecundario}" Margin="0,0,8,0" Click="Eliminar_Click" />
+                <Button x:Name="BotonActualizar" Content="Actualizar" Style="{StaticResource BotonSecundario}" Margin="0,0,8,0" Click="Actualizar_Click" />
+                <Button x:Name="BotonNuevo" Content="Nuevo" Style="{StaticResource BotonPrimario}" Click="Nuevo_Click" />
+            </StackPanel>
+        </DockPanel>
+
+        <Border Style="{StaticResource Tarjeta}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+                    <TextBlock Text="Filtrar por región" Style="{StaticResource Etiqueta}" Margin="0,0,0,6" />
+                    <WrapPanel x:Name="Filtros" />
+                </StackPanel>
+                <DataGrid x:Name="Tabla" />
+            </DockPanel>
+        </Border>
+    </DockPanel>
+</UserControl>

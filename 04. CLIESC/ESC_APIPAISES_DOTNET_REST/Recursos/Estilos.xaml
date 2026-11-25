@@ -1,0 +1,259 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Paleta y fuentes del cliente de escritorio de TI.2.1 (vista/Estilos.java), que a su vez
+         son las de EurekaBank: las interfaces se ven iguales. -->
+    <SolidColorBrush x:Key="Primario" Color="#1F4E79" />
+    <SolidColorBrush x:Key="Fondo" Color="#F4F6F8" />
+    <SolidColorBrush x:Key="Texto" Color="#1F2937" />
+    <SolidColorBrush x:Key="Borde" Color="#D1D5DB" />
+    <SolidColorBrush x:Key="BordeEntrada" Color="#6B7280" />
+    <SolidColorBrush x:Key="FondoResultado" Color="#E8F0F8" />
+    <SolidColorBrush x:Key="Exito" Color="#15803D" />
+    <SolidColorBrush x:Key="Error" Color="#B91C1C" />
+    <SolidColorBrush x:Key="Apagado" Color="#9CA3AF" />
+    <SolidColorBrush x:Key="Blanco" Color="#FFFFFF" />
+
+    <!-- SansSerif de Java en Windows es Arial -->
+    <FontFamily x:Key="Fuente">Arial</FontFamily>
+
+    <Style TargetType="Window" x:Key="Ventana">
+        <Setter Property="FontFamily" Value="{StaticResource Fuente}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="Background" Value="{StaticResource Fondo}" />
+    </Style>
+
+    <!-- Textos: titulo(), subtitulo(), etiqueta(), texto() -->
+    <Style x:Key="Titulo" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="26" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Primario}" />
+    </Style>
+    <Style x:Key="Subtitulo" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Primario}" />
+    </Style>
+    <Style x:Key="Etiqueta" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+    </Style>
+    <Style x:Key="TextoNormal" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style x:Key="Pequena" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Apagado}" />
+    </Style>
+    <!-- lineaMensaje(): verde si salió bien, rojo si hubo un error (se cambia desde Estilos.Mostrar) -->
+    <Style x:Key="LineaMensaje" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="MinHeight" Value="18" />
+    </Style>
+
+    <!-- Botones: botonPrimario(), botonSecundario(), botonNavegacion() -->
+    <Style x:Key="BotonBase" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Fuente}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="MinHeight" Value="36" />
+        <!-- setFocusPainted(false) -->
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Fondo" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="Center" RecognizesAccessKey="True" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Fondo" Property="Opacity" Value="0.9" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Fondo" Property="Opacity" Value="0.75" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Fondo" Property="Opacity" Value="0.5" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="BotonPrimario" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="Background" Value="{StaticResource Primario}" />
+        <Setter Property="Foreground" Value="{StaticResource Blanco}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="16,8" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="BotonSecundario" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="Background" Value="{StaticResource Blanco}" />
+        <Setter Property="Foreground" Value="{StaticResource Primario}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BordeEntrada}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="15,7" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="BotonNavegacion" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="Background" Value="{StaticResource Blanco}" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="14,8" />
+        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+    <!-- Tarjetas de la pantalla de inicio: un botón por opción -->
+    <Style x:Key="BotonTarjeta" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="Background" Value="{StaticResource Blanco}" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Borde}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Padding" Value="16,14" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+    </Style>
+    <!-- Filtros por región (JToggleButton): una sola opción elegida -->
+    <Style x:Key="Filtro" TargetType="RadioButton">
+        <Setter Property="FontFamily" Value="{StaticResource Fuente}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="Margin" Value="0,0,6,0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="Fondo" Background="{StaticResource Blanco}" BorderBrush="{StaticResource BordeEntrada}"
+                            BorderThickness="1" Padding="10,4">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource FondoResultado}" />
+                            <Setter TargetName="Fondo" Property="BorderBrush" Value="{StaticResource Primario}" />
+                            <Setter Property="Foreground" Value="{StaticResource Primario}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Fondo" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Entradas: entrada() -->
+    <Style x:Key="Entrada" TargetType="Control">
+        <Setter Property="FontFamily" Value="{StaticResource Fuente}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="Background" Value="{StaticResource Blanco}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BordeEntrada}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style TargetType="TextBox" BasedOn="{StaticResource Entrada}" />
+    <Style TargetType="PasswordBox" BasedOn="{StaticResource Entrada}" />
+    <Style TargetType="ComboBox" BasedOn="{StaticResource Entrada}">
+        <Setter Property="Padding" Value="8,4" />
+    </Style>
+
+    <!-- panelTarjeta(): fondo blanco con borde -->
+    <Style x:Key="Tarjeta" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Blanco}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Borde}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="16" />
+    </Style>
+
+    <!-- Progreso indeterminado, oculto hasta que empieza una operación -->
+    <Style x:Key="Progreso" TargetType="ProgressBar">
+        <Setter Property="IsIndeterminate" Value="True" />
+        <Setter Property="Width" Value="120" />
+        <Setter Property="Height" Value="8" />
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,8,0" />
+        <Setter Property="Foreground" Value="{StaticResource Primario}" />
+    </Style>
+
+    <!-- tabla(): solo lectura, una fila elegida, encabezado en negrita -->
+    <Style x:Key="EncabezadoTabla" TargetType="DataGridColumnHeader">
+        <Setter Property="FontFamily" Value="{StaticResource Fuente}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="Background" Value="#EEF0F3" />
+        <Setter Property="BorderBrush" Value="{StaticResource Borde}" />
+        <Setter Property="BorderThickness" Value="0,0,1,1" />
+        <Setter Property="Padding" Value="6,4" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+    </Style>
+    <Style x:Key="Tabla" TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="CanUserReorderColumns" Value="False" />
+        <Setter Property="CanUserResizeRows" Value="False" />
+        <Setter Property="SelectionMode" Value="Single" />
+        <Setter Property="SelectionUnit" Value="FullRow" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="GridLinesVisibility" Value="All" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Borde}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource Borde}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Borde}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{StaticResource Blanco}" />
+        <Setter Property="RowBackground" Value="{StaticResource Blanco}" />
+        <Setter Property="FontFamily" Value="{StaticResource Fuente}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="RowHeight" Value="26" />
+        <Setter Property="ColumnHeaderStyle" Value="{StaticResource EncabezadoTabla}" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+    </Style>
+    <Style x:Key="CeldaDerecha" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Margin" Value="4,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="CeldaCentro" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="CeldaIzquierda" TargetType="TextBlock">
+        <Setter Property="Margin" Value="4,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <!-- barraMenu(): blanca con borde inferior -->
+    <Style TargetType="Menu">
+        <Setter Property="Background" Value="{StaticResource Blanco}" />
+        <Setter Property="FontFamily" Value="{StaticResource Fuente}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Foreground" Value="{StaticResource Texto}" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="BorderBrush" Value="{StaticResource Borde}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+    </Style>
+
+</ResourceDictionary>

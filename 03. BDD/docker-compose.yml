@@ -1,0 +1,71 @@
+# SQL Server local para el servidor APIPaises (TI.2.2).
+# Los valores coinciden con ConnectionStrings:SqlServerConnection de
+# 04. SERVIDOR/WS_APIPAISES_DOTNET_REST/appsettings.json:
+#   Server=localhost,1433;Database=APIPaisesDB   usuario sa / clave Root1234!
+#
+# Iniciar:   docker compose up -d        (dentro de "03. BDD")
+# Detener:   docker compose down
+# Reiniciar: docker compose down -v      (borra los datos; el script se vuelve a ejecutar)
+#
+# La imagen de SQL Server no ejecuta scripts al arrancar, así que el servicio "init" espera
+# a que el servidor responda y, si la base APIPaisesDB no existe, la crea con la collation
+# Latin1_General_100_CI_AI y ejecuta APIPaisesDB.sql (tablas y datos iniciales, generado desde
+# la migración InitialCreate de EF Core). Si la base ya existe no hace nada.
+# Ver su resultado: docker compose logs init
+#
+# Otros talleres (p. ej. TI.1.2 y TI.1.4 EurekaBank .NET) usan el mismo puerto 1433: levante uno a la vez.
+name: apipaises-ti22
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: apipaises-ti22-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: "Root1234!"   # Password de la cadena de conexión (usuario sa)
+      TZ: America/Guayaquil
+    ports:
+      - "1433:1433"
+    volumes:
+      # Conserva los datos entre reinicios
+      - apipaises-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  init:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: apipaises-ti22-init
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: "no"
+    environment:
+      MSSQL_SA_PASSWORD: "Root1234!"
+    volumes:
+      - ./APIPaisesDB.sql:/scripts/01-APIPaisesDB.sql:ro
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        sqlcmd() { /opt/mssql-tools18/bin/sqlcmd -C -S sqlserver -U sa -P "$$MSSQL_SA_PASSWORD" -b "$$@"; }
+        existe=$$(sqlcmd -h -1 -W -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.databases WHERE name = 'APIPaisesDB'") || exit 1
+        if [ "$$existe" = "1" ]; then
+          echo "La base APIPaisesDB ya existe; no se ejecuta el script."
+          exit 0
+        fi
+        sqlcmd -Q "CREATE DATABASE APIPaisesDB COLLATE Latin1_General_100_CI_AI" || exit 1
+        if sqlcmd -d APIPaisesDB -f 65001 -i /scripts/01-APIPaisesDB.sql; then
+          echo "Base APIPaisesDB creada con las regiones y los usuarios de prueba."
+        else
+          echo "Error al ejecutar el script; se elimina la base para reintentar en el próximo arranque."
+          sqlcmd -Q "DROP DATABASE APIPaisesDB"
+          exit 1
+        fi
+
+volumes:
+  apipaises-data:

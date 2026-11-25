@@ -1,0 +1,141 @@
+@*
+  ECUD3 Consultar País en la API, ECUD2 Importar e «Importar todos».
+  La muestra ConsultaController (GET/POST /consulta). ViewData:
+    nombre (texto consultado), resultados, mensaje / error
+    confirmar = guardar       -> confirmación de ECUD2 (consulta, pais)
+    confirmar = importarTodos -> confirmación de la importación total (consulta)
+*@
+@{
+    ViewData["titulo"] = "Consultar en la API";
+    ViewData["activeNav"] = "consulta";
+    string consulta = ViewData["consulta"] as string ?? "";
+    string nombre = ViewData["nombre"] as string ?? "";
+    var resultados = ViewData["resultados"] as List<Pais> ?? [];
+    string urlVolver = "/consulta" + (consulta.Length == 0 ? "" : "?nombre=" + Uri.EscapeDataString(consulta));
+    string confirmar = ViewData["confirmar"] as string ?? "";
+}
+<div class="content__title">
+    <h1 class="text-heading-xl">Consultar en la API</h1>
+    <p class="text-body">Consulte un país en REST Countries y guárdelo en la base de datos local</p>
+</div>
+
+@if (confirmar == "guardar")
+{
+    @* ===== ECUD2 pasos 2 y 3: confirmación ===== *@
+    <section class="op-dialog" aria-labelledby="confirmar-title">
+        <h2 id="confirmar-title" class="op-dialog__title">Guardar país</h2>
+        <p class="op-dialog__text">¿Guardar el país <strong>@ViewData["pais"]</strong> en la base de datos local?</p>
+        <form class="op-form" method="post" action="/consulta" data-procesando>
+            <partial name="_Csrf" />
+            <input type="hidden" name="accion" value="guardar">
+            <input type="hidden" name="paso" value="confirmar">
+            <input type="hidden" name="consulta" value="@consulta">
+            <input type="hidden" name="nombre" value="@ViewData["pais"]">
+            <div class="op-actions">
+                <span class="procesando" role="status">Procesando...</span>
+                <a class="btn btn--secondary" href="@urlVolver">Volver</a>
+                <button class="btn btn--primary" type="submit">Guardar</button>
+            </div>
+        </form>
+    </section>
+}
+else if (confirmar == "importarTodos")
+{
+    @* ===== Importar todos: confirmación ===== *@
+    <section class="op-dialog" aria-labelledby="confirmar-title">
+        <h2 id="confirmar-title" class="op-dialog__title">Importar todos los países</h2>
+        <p class="op-dialog__text">¿Importar todos los países desde la API REST Countries?
+            Los nuevos se registran y los que ya existen se actualizan.</p>
+        <form class="op-form" method="post" action="/consulta" data-procesando>
+            <partial name="_Csrf" />
+            <input type="hidden" name="accion" value="importarTodos">
+            <input type="hidden" name="paso" value="confirmar">
+            <input type="hidden" name="consulta" value="@consulta">
+            <div class="op-actions">
+                <span class="procesando" role="status">Procesando... (puede tardar unos segundos)</span>
+                <a class="btn btn--secondary" href="@urlVolver">Volver</a>
+                <button class="btn btn--primary" type="submit">Importar</button>
+            </div>
+        </form>
+    </section>
+}
+else
+{
+    @* ===== Consulta y resultados ===== *@
+    <form class="op-card op-card--wide" method="get" action="/consulta" data-procesando>
+        <div class="search-row">
+            <div class="field">
+                <label class="field__label" for="nombre">Nombre del país</label>
+                <input class="field__input" type="text" id="nombre" name="nombre" maxlength="100"
+                       value="@nombre" placeholder="Ej.: ecuador" autocomplete="off" required autofocus>
+            </div>
+            <button class="btn btn--primary" type="submit">Consultar</button>
+        </div>
+        <span class="procesando" role="status">Procesando...</span>
+    </form>
+
+    @if (ViewData["mensaje"] is string mensaje && mensaje.Length > 0)
+    {
+        <p class="alert alert--success" role="status">@mensaje</p>
+    }
+    @if (ViewData["error"] is string error && error.Length > 0)
+    {
+        <p class="alert alert--error" role="alert">@error</p>
+    }
+
+    <section class="op-card op-card--wide" aria-label="Resultados de la API">
+        @if (resultados.Count > 0)
+        {
+            <div class="history__scroll">
+                <table class="history__table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Capital</th>
+                        <th scope="col">Región</th>
+                        <th scope="col" class="history__amount">Población</th>
+                        <th scope="col">Moneda</th>
+                        <th scope="col">Guardado</th>
+                        <th scope="col" class="history__amount">Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (Pais p in resultados)
+                    {
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td>@p.Capital</td>
+                            <td>@p.Region</td>
+                            <td class="history__amount">@p.PoblacionFormateada</td>
+                            <td>@p.Moneda</td>
+                            <td><span class="tag @(p.Guardado ? "tag--si" : "tag--no")">@(p.Guardado ? "Sí" : "No")</span></td>
+                            <td>
+                                <div class="row-actions">
+                                    <form class="inline-form" method="post" action="/consulta">
+                                        <partial name="_Csrf" />
+                                        <input type="hidden" name="accion" value="guardar">
+                                        <input type="hidden" name="paso" value="revisar">
+                                        <input type="hidden" name="consulta" value="@nombre">
+                                        <input type="hidden" name="nombre" value="@p.Nombre">
+                                        <button class="btn btn--primary btn--small" type="submit">Guardar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        <div class="toolbar">
+            <p class="total">Importe todos los países de REST Countries a la base local de una sola vez.</p>
+            <form class="inline-form" method="post" action="/consulta">
+                <partial name="_Csrf" />
+                <input type="hidden" name="accion" value="importarTodos">
+                <input type="hidden" name="paso" value="revisar">
+                <input type="hidden" name="consulta" value="@nombre">
+                <button class="btn btn--secondary" type="submit">Importar todos</button>
+            </form>
+        </div>
+    </section>
+}

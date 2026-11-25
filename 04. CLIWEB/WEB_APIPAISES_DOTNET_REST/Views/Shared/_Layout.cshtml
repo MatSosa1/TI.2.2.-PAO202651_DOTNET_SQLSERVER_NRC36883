@@ -1,0 +1,69 @@
+@*
+  Página de la aplicación: encabezado (logo, sello del servicio, usuario, cerrar sesión), menú lateral
+  (ECUD1 paso 7) y el contenido de cada pantalla. ViewData["activeNav"] resalta la pantalla actual
+  (inicio | paises | consulta | busqueda | informes); ViewData["estilos"] elige las hojas de estilo.
+*@
+@{
+    string activeNav = ViewData["activeNav"] as string ?? "";
+    string[] estilos = ViewData["estilos"] as string[] ?? ["apipaises", "menu", "operacion", "paises"];
+    string Activo(string nombre) => activeNav == nombre ? " nav__item--active" : "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["titulo"] | APIPaises</title>
+    @foreach (string estilo in estilos)
+    {
+        <link rel="stylesheet" href="/css/@(estilo).css">
+    }
+</head>
+<body>
+<header class="app-header">
+    <div class="app-header__left">
+        <span class="logo"><span class="logo__mark">AP</span>APIPaises</span>
+        @* Sello del servicio: este cliente consume el servicio REST desarrollado en .NET *@
+        <span class="badge" title="Servicio consumido: REST / .NET">
+            <span class="badge__label">Servicio</span>
+            <span class="badge__protocol--rest">REST</span>
+            <span class="badge__platform--dotnet">.NET</span>
+        </span>
+    </div>
+
+    <div class="app-header__right">
+        <div class="user">
+            <span class="user__name">@Context.Session.GetString(SesionWeb.Nombre)</span>
+            <span class="user__role">Usuario</span>
+        </div>
+        <form method="post" action="/logout">
+            <partial name="_Csrf" />
+            <button class="btn btn--secondary" type="submit">Cerrar sesión</button>
+        </form>
+    </div>
+</header>
+
+<div class="app-body">
+    <aside class="sidebar">
+        <p class="sidebar__caption">MENÚ</p>
+        <nav aria-label="Menú principal">
+            <ul class="nav">
+                <li><a class="nav__item@(Activo("inicio"))" href="/menu" aria-current="@(activeNav == "inicio" ? "page" : null)">Inicio</a></li>
+                <li><a class="nav__item@(Activo("paises"))" href="/paises" aria-current="@(activeNav == "paises" ? "page" : null)">Países</a></li>
+                <li><a class="nav__item@(Activo("consulta"))" href="/consulta" aria-current="@(activeNav == "consulta" ? "page" : null)">Consultar en la API</a></li>
+                <li><a class="nav__item@(Activo("busqueda"))" href="/busqueda" aria-current="@(activeNav == "busqueda" ? "page" : null)">Buscar países</a></li>
+                <li><a class="nav__item@(Activo("informes"))" href="/informes" aria-current="@(activeNav == "informes" ? "page" : null)">Informes</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="content">
+        @RenderBody()
+    </main>
+</div>
+@if (ViewData["sinScript"] is not true)
+{
+    <script src="/js/procesando.js"></script>
+}
+</body>
+</html>

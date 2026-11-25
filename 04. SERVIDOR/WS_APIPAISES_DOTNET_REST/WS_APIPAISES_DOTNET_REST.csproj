@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- Servidor RESTful de APIPaises (TI.2.2): ASP.NET Core + EF Core + SQL Server. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>WS_APIPAISES_DOTNET_REST</RootNamespace>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <!-- Las pruebas van en pruebas/ (convención del curso) y se compilan en su propio proyecto. -->
+  <ItemGroup>
+    <Compile Remove="pruebas\**" />
+    <Content Remove="pruebas\**" />
+    <EmbeddedResource Remove="pruebas\**" />
+    <None Remove="pruebas\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="WS_APIPAISES_DOTNET_REST.Pruebas" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!-- Lee el JSON de REST Countries (equivale a Gson en el servidor Java) -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+</Project>
